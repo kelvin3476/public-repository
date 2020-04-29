@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- Webpage Title -->
+    <title>FaceChat</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {
+                    id_give: $('#useremail').val(),
+                    pw_give: $('#userpw').val()
+                },
+                success: function(response) {
+                    if (response['result'] == 'success') {
+                        // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+                        // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+                        $.cookie('mytoken', response['token']);
+
+                        alert('로그인 완료!')
+                        window.location.href = '/main'
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+
+<body>
+    <div class="wrap">
+        <div class="titlecover" data-obj-id="6qK77" data-obj-type="element" data-text-editable="true">
+            <div data-text-content="true" class="webtitle" spellcheck="false"><br>
+                <div>Face Chat</div>
+            </div>
+        </div>
+        <div data-obj-id="a18QT" data-obj-type="element" data-text-editable="true" class="email">
+            <input type="text" id="useremail" data-min-width="60" data-min-height="30" data-text-content="true" placeholder="email" style="color: black; width: 300px; height: 40px;" class=""></div>
+        <div data-obj-id="VOX9F" data-obj-type="element" data-text-editable="true" class="password">
+            <input type="password" id="userpw" data-min-width="60" data-min-height="30" data-text-content="true" placeholder="password" style="color: black; width: 300px; height: 40px;" class=""></div>
+        <button class="loginbox" id="btn-posting-box" class="btn btn-primary btn-lg" href="/main" onclick="login()" role="button">로그인</a>
+    </div>
+    <div data-obj-id="pZ2yK" data-obj-type="element" class="checkbox">
+        <label data-form-control="checkbox" data-min-width="20" data-min-height="20">
+            <input type="checkbox" checked="checked">
+            <span data-form-decorator="true">
+            </span>
+        </label>
+    </div>
+    <div data-obj-id="1NpdI" data-obj-type="element" data-text-editable="true" class="loginstatus">
+        <div data-text-content="true" style="font-size:16px;" class="">로그인 상태 유지</div>
+    </div>
+    <a class="email_find" id="btn-posting-box" class="btn btn-primary btn-lg" onclick="openclose()" href="#"
+        role="button">이메일 찾기</a>
+    <a class="signup" id="btn-posting-box" class="btn btn-primary btn-lg" href="/signup"
+        role="button">회원가입</a>
+    <a class="password_find" id="btn-posting-box" class="btn btn-primary btn-lg" onclick="openclose()" href="#"
+        role="button">비밀번호 찾기</a>
+    </div>
+</body>
+
+</html>

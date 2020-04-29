@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Webpage Title -->
+    <title>FaceChat</title>
+
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}" />
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function() {
+            var socket = io.connect(
+                "http://" + document.domain + ":" + location.port + "/mynamespace"
+            );
+            socket.on("response", function(msg) {
+                $("#received").append(
+                    "<p> " + msg.username + ": " + msg.data + "</p>"
+                );
+            });
+            $("form#broadcast").submit(function(event) {
+                if ($("#input-data").val() == "") {
+                    return false;
+                }
+                socket.emit("request", {
+                    data: $("#input-data").val()
+                });
+                $("#input-data").val("");
+                return false;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#sendbtn").click(function() {
+                var isi_pesan = $("#btn-input").val().trim();
+
+                if (isi_pesan == "") {
+                    alert("Jangan Pesan Kosong Bogeng");
+                } else {
+                    var end_point =
+                        "http://sandbox.api.simsimi.com/request.p?key=316aa10e-ad7f-4b77-b5e7-743b0fbb5f6c&lc=en&ft=1.0&text=" +
+                        isi_pesan;
+
+                    $("#pesan").append(
+                        '<li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class="text-muted"><span class="glyphicon glyphicon-time"></span></small><strong class="pull-right primary-font">You</strong></div><p class="pull-right primary-font">' +
+                        isi_pesan +
+                        "</p></div></li>"
+                    );
+                    $("#btn-input").val("");
+
+                    $.getJSON(end_point, function(result) {
+                        console.log(result);
+                    });
+                }
+            });
+        });
+
+        // 로딩 후 바로 실행
+        $(document).ready(function() {
+            if ($.cookie("mytoken") == undefined) {
+                // mytoken이라는 값으로 쿠키가 없으면, 로그인 창으로 이동시킵니다.
+                alert("먼저 로그인을 해주세요");
+                window.location.href = "/login";
+            } else {
+                // 쿠기가 있으면, 유저 정보를 불러옵니다.
+                load_user_info();
+            }
+        });
+
+        // 쿠키에 가지고 있는 token을 헤더에 담아서 보냅니다.
+        function load_user_info() {
+            $.ajax({
+                type: "GET",
+                url: "/api/main",
+                headers: {
+                    token_give: $.cookie("mytoken")
+                },
+                data: {},
+                success: function(response) {
+                    if (response["result"] == "success") {
+                        // 올바른 결과값을 받으면 nickname을 입력해줍니다.
+                        $("#nickname").text(response["nickname"]);
+                    } else {
+                        // 에러가 나면 메시지를 띄우고 로그인 창으로 이동합니다.
+                        alert(response["msg"]);
+                        window.location.href = "/login";
+                    }
+                },
+            });
+        }
+
+        function logout() {
+            $.removeCookie("mytoken");
+            alert("로그아웃!");
+            window.location.href = "/login";
+        }
+    </script>
+</head>
+
+<body id="wrap">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-comment"></span> 이승우님과 채팅중
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="chat" id="pesan">
+                        <li class="left clearfix">
+                            <span class="chat-img pull-left">
+                  <img
+                    src="https://i.ibb.co/p2tRzXS/resume-picture.jpg"
+                    width="50"
+                    height="40"
+                    alt="User Avatar"
+                    class="img-circle"
+                  />
+                </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">이승우</strong>
+                                    <small class="pull-right text-muted">
+                      <span class="glyphicon glyphicon-time"></span
+                    ></small>
+                                </div>
+                                <p>
+                                    안녕하세요~!
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                    <!--                         
+                           -->
+
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            <input id="btn-input" type="text" class="form-control input-sm" placeholder="메세지 보낼 내용..." />
+                            <span class="input-group-btn">
+                  <button
+                    id="sendbtn"
+                    class="btn btn-warning btn-sm"
+                    id="btn-chat"
+                  >
+                    전송
+                  </button>
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="logout" type="button" class="btn btn-danger" onclick="logout()">
+      로그아웃하기
+    </button>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/signup.css') }}">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <script>
+
+        function signup() {
+
+            let id = $('#email').val();
+            let pw = $('#pw').val();
+            let pwcheck = $('#pwcheck').val();
+            let nickname = $('#nickname').val();
+            let phonenumber = $('#phonenumber').val();
+            let birthday = $('#birthday').val();
+
+            if (id == '') {
+                alert('이메일을 입력해주세요.');
+                $('#email').focus();
+                return;
+            } else if (pw == '') {
+                alert('비밀번호를 입력해주세요.');
+                $('#pw').focus();
+                return;
+            } else if (pwcheck == '') {
+                alert('비밀번호 확인을해주세요.');
+                $('#pwcheck').focus();
+                return;
+            } else if (nickname == '') {
+                alert('별명을 입력해주세요.');
+                $('#nickname').focus();
+                return;
+            } else if (phonenumber == '') {
+                alert('전화번호를 입력해주세요.');
+                $('#phonenumber').focus();
+                return;
+            } else if (birthday == '') {
+                alert('생일을 입력해주세요.');
+                $('#birthday').focus();
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/signup",
+                data: {
+                    'id_give': id,
+                    'pw_give': pw,
+                    'pwcheck_give': pwcheck,
+                    'nickname_give': nickname,
+                    'phonenumber_give': phonenumber,
+                    'birthday_give': birthday
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        $('#email').val();
+                        $('#pw').val();
+                        $('#pwcheck').val();
+                        $('#nickname').val();
+                        $('#phonenumber').val();
+                        $('#birthday').val();
+                        window.location.href = '/login';
+                    }
+                }
+            })
+        }
+
+
+        function id_overlap_check() {
+
+            let id_give = $('#email').val()
+
+            if (id_give == '') {
+                alert('이메일을 입력해주세요.');
+                $('#email').focus();
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/signup/id",
+                data: { 'id_give': id_give },
+                success: function (response) {
+                    console.log(response);
+                    if (response['result'] == 'success') {
+                        alert('사용하실수 있는 아이디 입니다!')
+                    } else {
+                        alert('중복된 아이디 입니다.')
+                    }
+                }
+            });
+        }
+
+        function nick_overlap_check() {
+
+            let nickname_give = $('#nickname').val()
+
+            if (nickname_give == '') {
+                alert('별명을 입력해주세요.');
+                $('#nickname').focus();
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/signup/nick",
+                data: { 'nickname_give': nickname_give },
+                success: function (response) {
+                    console.log(response);
+                    if (response['result'] == 'success') {
+                        alert('사용하실수 있는 닉네임 입니다!')
+                    } else {
+                        alert('중복된 닉네임 입니다.')
+                    }
+                }
+            });
+        }
+
+    </script>
+
+</head>
+
+<body id="wrap">
+    <div data-canvas="true" data-show-memo="false" data-show-link="false"
+        title="페이지에 링크가 연결된 객체가 있을 경우 화면을 터치/클릭하면 표시됩니다." class="">
+        <div data-obj-id="2mwb6" data-obj-type="element" data-text-editable="true" class=""
+            style="position: absolute; top: 49px; left: 400px; width: 400px; height: 60px;">
+            <div data-text-content="true"
+                style="border-radius: 30px; line-height: 20px; color: rgb(255, 255, 255); font-size: 20px; box-shadow: none; background-color: black; text-align: center;"
+                class="" spellcheck="false">
+                <div><br></div>
+                <div>회원가입</div>
+            </div>
+        </div>
+        <div data-obj-id="4cAsZ" data-obj-type="element" class=""
+            style="position: absolute; top: 189px; left: 300px; width: 600px; height: 10px;">
+            <div data-image-content="true">
+                <hr style="border: solid 1.2px black;">
+            </div>
+        </div>
+    </div>
+    </div>
+    <div data-obj-id="J3O5n" data-obj-type="element" class=""
+        style="position: absolute; top: 253px; left: 300px; width: 600px; height: 10px;">
+        <div data-image-content="true">
+            <hr style="border: solid 1.2px black;">
+        </div>
+    </div>
+    <div data-obj-id="a0WJH" data-obj-type="element" class=""
+        style="position: absolute; top: 319px; left: 300px; width: 600px; height: 10px;">
+        <div data-image-content="true">
+            <hr style="border: solid 1.2px black;">
+        </div>
+    </div>
+    <div data-obj-id="683t4" data-obj-type="element" class=""
+        style="position: absolute; top: 382px; left: 300px; width: 600px; height: 10px;">
+        <div data-image-content="true">
+            <hr style="border: solid 1.2px black;">
+        </div>
+    </div>
+    </div>
+    <div data-obj-id="3kVLe" data-obj-type="element" class=""
+        style="position: absolute; top: 447px; left: 300px; width: 600px; height: 10px;">
+        <div data-image-content="true">
+            <hr style="border: solid 1.2px black;">
+        </div>
+    </div>
+    </div>
+    <div data-obj-id="60rch" data-obj-type="element" class=""
+        style="position: absolute; top: 511px; left: 300px; width: 600px; height: 10px;">
+        <div data-image-content="true">
+            <hr style="border: solid 1.2px black;">
+        </div>
+    </div>
+    <div>
+        <input type="button" class="recheckbox1" id="btn-posting-box" class="btn btn-primary btn-lg" href="#"
+            value="중복확인" onclick="id_overlap_check()">
+    </div>
+    <div>
+        <input type="button" class="recheckbox2" id="btn-posting-box" class="btn btn-primary btn-lg" href="#"
+            value="중복확인" onclick="nick_overlap_check()">
+    </div>
+    </div>
+    <div data-obj-id="DSoHG" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 149px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">이메일 주소</div>
+        <input type="text" name="id" id="email" class="input_email">
+    </div>
+    <div data-obj-id="RTJIM" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 213px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">비밀번호</div>
+        <input type="text" id="pw" class="input_password">
+    </div>
+    <div data-obj-id="UNjGT" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 279px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">비밀번호 확인</div>
+        <input type="text" id="pwcheck" class="password_check">
+    </div>
+    <div data-obj-id="FD1uw" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 342px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">닉네임(별명)</div>
+        <input type="text" id="nickname" class="input_nickname">
+    </div>
+    <div data-obj-id="DPgOh" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 407px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">휴대전화번호('-'제외)</div>
+        <input type="text" id="phonenumber" class="input_phonenumber">
+    </div>
+    <div data-obj-id="Bg7zi" data-obj-type="element" data-text-editable="true" class=""
+        style="position: absolute; top: 471px; left: 300px; width: 300px; height: 40px;">
+        <div data-text-content="true" style="font-size:16px;" class="">생년월일 (8자리 입력)</div>
+        <input type="text" id="birthday" class="input_birthday">
+    </div>
+    <button onclick="signup()" class="signup" id="btn-posting-box" class="btn btn-primary btn-lg" href='/login'
+        style="top: 550px;">회원가입</button>
+</body>
+
+</html>
